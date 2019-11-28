@@ -7,42 +7,42 @@ reExImage = imresize(exImage, 0.5);
 
 %i think restore algorithm will be use here
 grayExImage = rgb2gray(reExImage);
-grayExImage = im2bw(grayExImage, 0.5);
-figure; imshow(grayExImage);
+grayExImage = im2bw(grayExImage, 0.511);
+imshow(grayExImage);
 
 PSF = fspecial('motion',21,11);
 Idouble = im2double(grayExImage);
 blurred = imfilter(Idouble,PSF,'conv','circular');
-figure; imshow(blurred)
+imshow(blurred)
 
 noise_mean = 0;
 noise_var = 0.0001;
 blurred_noisy = imnoise(blurred,'gaussian',noise_mean,noise_var);
-figure; imshow(blurred_noisy)
+imshow(blurred_noisy)
 title('Blurred and Noisy Image')
 
 wnr2 = deconvwnr(blurred_noisy,PSF);
-figure; imshow(wnr2)
+imshow(wnr2)
 title('Restoration of Blurred Noisy Image (NSR = 0)')
 
 signal_var = var(Idouble(:));
 NSR = noise_var / signal_var;
 wnr3 = deconvwnr(blurred_noisy,PSF,NSR);
-figure; imshow(wnr3)
+imshow(wnr3)
 title('Restoration of Blurred Noisy Image (Estimated NSR)')
 
 
 
-grayExImage = imadjust(wnr3, [], [0.4 0.8]);
-figure; imshow(grayExImage);
+grayExImage = imadjust(wnr3, [], [0.3 0.7]);
+imshow(grayExImage);
 
 %for tell ocr 
 character = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 %use ocr with image
-ocrResult = ocr(grayExImage, 'Characterset', character, 'TextLayout', 'Block');
+ocrResult = ocr(reExImage, 'Characterset', character, 'TextLayout', 'Block');
 
 %Remove whitespace from detect by logical solution
-bestText = ocrResult.CharacterConfidences > 0.5;
+bestText = ocrResult.CharacterConfidences > 0.3;
 %Get text From bestText Logical 
 textVal = num2cell(ocrResult.Text(bestText));
 %Get Confidences From bestText Logical 
