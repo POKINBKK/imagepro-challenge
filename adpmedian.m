@@ -32,7 +32,4 @@ for k = 3:2:Smax
         break;
     end
 end
-%
-%
-%
 f(~alreadyProcessed) = zmed(~alreadyProcessed);
