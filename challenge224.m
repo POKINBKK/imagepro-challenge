@@ -1,13 +1,13 @@
 clear all;
 close all;
 %load image
-exImage = imread('215.jpg');
+exImage = imread('224.jpg');
 %resize image cause image is so big
 reExImage = imresize(exImage, 0.5);
 
 %i think restore algorithm will be use here
 grayExImage = rgb2gray(reExImage);
-grayExImage = im2bw(grayExImage, 0.51);
+grayExImage = im2bw(grayExImage, 0.5);
 figure; imshow(grayExImage);
 
 PSF = fspecial('motion',21,11);
@@ -33,10 +33,8 @@ title('Restoration of Blurred Noisy Image (Estimated NSR)')
 
 
 
-grayExImage = imadjust(wnr3, [], [0.8 0.4]);
-grayExImage1 = adapthisteq(wnr3);
+grayExImage = imadjust(wnr3, [], [0.4 0.8]);
 figure; imshow(grayExImage);
-figure; imshow(grayExImage1);
 
 %for tell ocr 
 character = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -44,7 +42,7 @@ character = 'abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 ocrResult = ocr(grayExImage, 'Characterset', character, 'TextLayout', 'Block');
 
 %Remove whitespace from detect by logical solution
-bestText = ocrResult.CharacterConfidences > 0.5;
+bestText = ocrResult.CharacterConfidences > 0.7;
 %Get text From bestText Logical 
 textVal = num2cell(ocrResult.Text(bestText));
 %Get Confidences From bestText Logical 
