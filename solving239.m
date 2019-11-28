@@ -1,7 +1,7 @@
 clear all;
 close all;
 %load image
-f = imread('240.jpg');
+f = imread('239.jpg');
 imshow(f)
 show = f;
 f = im2double(f);
